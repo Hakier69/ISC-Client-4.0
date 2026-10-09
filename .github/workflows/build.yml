@@ -1,0 +1,51 @@
+name: Build mod
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: 8.14
+
+      - name: Build
+        # Loom downloads Minecraft from Mojang's servers; a download can fail randomly,
+        # so try up to 3 times (clearing the partial Loom cache between tries).
+        run: |
+          for i in 1 2 3; do
+            gradle build --stacktrace && exit 0
+            echo "Build attempt $i failed, retrying..."
+            rm -rf "$HOME/.gradle/caches/fabric-loom"
+            sleep 20
+          done
+          exit 1
+
+      - name: Upload mod jar
+        uses: actions/upload-artifact@v4
+        with:
+          name: ISC-Client
+          path: build/libs/*.jar
+
+      - name: Publish release (only for tags like v0.1.0)
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: build/libs/*.jar
