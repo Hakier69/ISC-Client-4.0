@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "id": "isc_client",
+  "version": "${version}",
+  "name": "ISC-Client",
+  "description": "Client-side mod. Press E + Z together to open the ISC-Client GUI.",
+  "authors": ["ISC"],
+  "license": "All-Rights-Reserved",
+  "environment": "client",
+  "entrypoints": {
+    "client": ["dev.isc.client.IscClientMod"]
+  },
+  "mixins": [
+    {
+      "config": "isc_client.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "fabricloader": ">=0.16.14",
+    "minecraft": "~1.21.8",
+    "java": ">=21",
+    "fabric-api": "*"
+  }
+}

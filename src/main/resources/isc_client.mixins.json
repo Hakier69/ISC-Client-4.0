@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "package": "dev.isc.client.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "client": [
+    "ClientCommonNetworkHandlerMixin",
+    "ClientPlayNetworkHandlerMixin",
+    "PlayerMoveC2SPacketAccessor"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
